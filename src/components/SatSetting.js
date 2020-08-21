@@ -7,6 +7,7 @@ class SatSetting extends Component {
     this.state = {
       observerLat: 0,
       observerLong: 0,
+      observerAlt: 0,
     };
   }
 
@@ -21,6 +22,13 @@ class SatSetting extends Component {
     console.log("value ", value);
     this.setState({
       observerLat: value,
+    });
+  };
+
+  onChangeAlt = (value) => {
+    console.log("value ", value);
+    this.setState({
+      observerAlt: value,
     });
   };
 
@@ -61,7 +69,7 @@ class SatSetting extends Component {
                 max={8850}
                 defaultValue={0}
                 style={{ margin: "0 2px" }}
-                onChange={this.onChangeEle}
+                onChange={this.onChangeAlt}
               />
             </div>
           </div>
