@@ -4,6 +4,7 @@
 @import "./styles/Footer.css";
 @import "./styles/Main.css";
 @import "./styles/SatSetting.css";
+@import "./styles/SatelliteList.css";
 
 body {
   margin: 0;
