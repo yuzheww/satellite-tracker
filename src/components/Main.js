@@ -9,8 +9,33 @@ class Main extends Component {
     super();
     this.state = {
       loadingSatellites: false,
+      selected: [],
     };
   }
+
+  trackOnClick = () => {
+    console.log(`tracking ${this.state.selected}`);
+  };
+
+  addOrRemove = (item, status) => {
+    let { selected: list } = this.state;
+    const found = list.some((entry) => entry.satid === item.satid);
+
+    if (status && !found) {
+      list.push(item);
+    }
+
+    if (!status && found) {
+      list = list.filter((entry) => {
+        return entry.satid !== item.satid;
+      });
+    }
+
+    console.log(list);
+    this.setState({
+      selected: list,
+    });
+  };
 
   showNearbySatellite = (setting) => {
     this.fetchSatellite(setting);
@@ -27,6 +52,7 @@ class Main extends Component {
         this.setState({
           satInfo: response.data,
           loadingSatellites: false,
+          selected: [],
         });
       })
       .catch((error) => {
@@ -45,6 +71,9 @@ class Main extends Component {
           <SatelliteList
             satInfo={this.state.satInfo}
             loading={this.state.loadingSatellites}
+            onSelectionChange={this.addOrRemove}
+            disableTrack={this.state.selected.length === 0}
+            trackOnclick={this.trackOnClick}
           />
         </div>
         <div className="right-side">right</div>
