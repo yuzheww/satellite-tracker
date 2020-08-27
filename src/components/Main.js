@@ -3,6 +3,7 @@ import SatSetting from "./SatSetting";
 import SatelliteList from "./SatelliteList";
 import { NEARBY_SATELLITE, STARLINK_CATEGORY, SAT_API_KEY } from "../constant";
 import Axios from "axios";
+import WorldMap from "./WorldMap";
 
 class Main extends Component {
   constructor() {
@@ -76,7 +77,9 @@ class Main extends Component {
             trackOnclick={this.trackOnClick}
           />
         </div>
-        <div className="right-side">right</div>
+        <div className="right-side">
+          <WorldMap />
+        </div>
       </div>
     );
   }
