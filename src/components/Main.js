@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import SatSetting from "./SatSetting";
 import SatelliteList from "./SatelliteList";
-import { NEARBY_SATELLITE, STARLINK_CATEGORY, SAT_API_KEY } from "../constant";
+import {
+  NEARBY_SATELLITE,
+  STARLINK_CATEGORY,
+  SAT_API_KEY,
+  SATELLITE_POSITION_URL,
+} from "../constant";
 import Axios from "axios";
 import WorldMap from "./WorldMap";
 
@@ -10,12 +15,37 @@ class Main extends Component {
     super();
     this.state = {
       loadingSatellites: false,
+      loadingSatPositions: false,
+      setting: undefined,
       selected: [],
     };
   }
 
-  trackOnClick = () => {
-    console.log(`tracking ${this.state.selected}`);
+  trackOnClick = (duration) => {
+    const { observerLat, observerLong, observerAlt } = this.state.setting;
+    const endTime = duration * 60;
+    this.setState({ loadingSatPositions: true });
+    const urls = this.state.selected.map((sat) => {
+      const { satid } = sat;
+      const url = `${SATELLITE_POSITION_URL}/${satid}/${observerLat}/${observerLong}/${observerAlt}/${endTime}/&apiKey=${SAT_API_KEY}`;
+      return Axios.get(url);
+    });
+
+    Axios.all(urls)
+      .then(
+        Axios.spread((...args) => {
+          return args.map((item) => item.data);
+        })
+      )
+      .then((res) => {
+        this.setState({
+          satPositions: res,
+          loadingSatPositions: false,
+        });
+      })
+      .catch((e) => {
+        console.log("err in fetch satellite position -> ", e.message);
+      });
   };
 
   addOrRemove = (item, status) => {
@@ -39,6 +69,9 @@ class Main extends Component {
   };
 
   showNearbySatellite = (setting) => {
+    this.setState({
+      setting: setting,
+    });
     this.fetchSatellite(setting);
   };
 
@@ -78,7 +111,7 @@ class Main extends Component {
           />
         </div>
         <div className="right-side">
-          <WorldMap />
+          <WorldMap loading={this.state.loadingSatPositions} />
         </div>
       </div>
     );

@@ -1,11 +1,24 @@
 import React, { Component } from "react";
-import { List, Avatar, Button, Checkbox, Spin } from "antd";
+import { List, Avatar, Button, Checkbox, Spin, InputNumber } from "antd";
 import Satellite from "../assets/images/Satellite.svg";
 
 class SatelliteList extends Component {
+  constructor() {
+    super();
+    this.state = {
+      duration: 0,
+    };
+  }
+
   onChange = (e) => {
     const { dataInfo, checked } = e.target;
     this.props.onSelectionChange(dataInfo, checked);
+  };
+
+  onChangeDuration = (value) => {
+    this.setState({
+      duration: value,
+    });
   };
 
   render() {
@@ -16,10 +29,20 @@ class SatelliteList extends Component {
           className="sat-list-btn"
           size="large"
           disabled={this.props.disableTrack}
-          onClick={() => this.props.trackOnclick()}
+          onClick={() => this.props.trackOnclick(this.state.duration)}
         >
           Track on the map
         </Button>
+        <div className="list-item">
+          <label>Track Duration </label>
+          <InputNumber
+            min={0}
+            max={90}
+            defaultValue={0}
+            style={{ margin: "0 2px" }}
+            onChange={this.onChangeDuration}
+          />
+        </div>
         <hr />
         {this.props.loading ? (
           <Spin tip="Loading Satellites..." />
