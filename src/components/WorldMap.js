@@ -4,6 +4,7 @@ import axios from "axios";
 import { geoKavrayskiy7 } from "d3-geo-projection";
 import { geoGraticule, geoPath } from "d3-geo";
 import { select as d3Select } from "d3-selection";
+import { Spin } from "antd";
 
 import { WORLD_MAP_URL } from "../constant";
 
@@ -75,6 +76,7 @@ class WorldMap extends Component {
     return (
       <div className="map-box">
         <canvas className="map" ref={this.refMap} />
+        {this.props.loading ? <Spin tip="Loading..." /> : <></>}
       </div>
     );
   }
