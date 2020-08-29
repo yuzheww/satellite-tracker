@@ -34,7 +34,7 @@ class SatelliteList extends Component {
           Track on the map
         </Button>
         <div className="list-item">
-          <label>Track Duration </label>
+          <label>Track Duration (minutes) </label>
           <InputNumber
             min={0}
             max={90}
